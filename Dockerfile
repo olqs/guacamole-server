@@ -37,8 +37,8 @@ ARG BUILD_JOBS
 # The directory that will house the guacamole-server source during the build 
 ARG BUILD_DIR=/tmp/guacamole-server
 
-# FreeRDP version (default to version 2)
-ARG FREERDP_VERSION=2
+# FreeRDP version (default to version 3)
+ARG FREERDP_VERSION=3
 
 # The final install location for guacamole-server and all dependencies. NOTE:
 # This value is hard-coded in the entrypoint. Any change to this value must be
@@ -73,7 +73,7 @@ ARG FREERDP_OPTS="\
     -DWITH_CLIENT=ON \
     -DWITH_CUPS=OFF \
     -DWITH_DIRECTFB=OFF \
-    -DWITH_FFMPEG=OFF \
+    -DWITH_FFMPEG=ON \
     -DWITH_FUSE=OFF \
     -DWITH_GSM=OFF \
     -DWITH_GSSAPI=OFF \
@@ -92,10 +92,10 @@ ARG FREERDP_OPTS="\
     -DWITH_SERVER_INTERFACE=OFF \
     -DWITH_SHADOW_MAC=OFF \
     -DWITH_SHADOW_X11=OFF \
-    -DWITH_SWSCALE=OFF \
-    -DWITH_WAYLAND=OFF \
+    -DWITH_SWSCALE=ON \
+    -DWITH_WAYLAND=ON \
     -DWITH_X11=OFF \
-    -DWITH_X264=OFF \
+    -DWITH_X264=ON \
     -DWITH_XCURSOR=ON \
     -DWITH_XEXT=ON \
     -DWITH_XI=OFF \
@@ -183,7 +183,10 @@ RUN apk add --no-cache                \
         sdl2-dev                      \
         sdl2_ttf-dev                  \
         util-linux-dev                \
-        webkit2gtk-dev
+        webkit2gtk-dev                \
+        x264-dev                      \
+        openh264-dev                  \
+        ffmpeg-dev
 
 # Copy generic, automatic build script
 COPY ./src/guacd-docker/bin/autobuild.sh ${BUILD_DIR}/src/guacd-docker/bin/
@@ -319,6 +322,9 @@ RUN apk add --no-cache                \
         terminus-font                 \
         ttf-dejavu                    \
         ttf-liberation                \
+        ffmpeg                        \
+        x264                          \
+        openh264                      \
         util-linux-login && \
     xargs apk add --no-cache < ${PREFIX_DIR}/DEPENDENCIES
 
